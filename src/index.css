@@ -1,13 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700&display=swap");
 
-/* MinTemp = 10 */
-/* TempColor = hsl(temp*(-10) 100% 40%) */
-/* MaxTemp = 35 */
-
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+:root {
+  --bg-color: radial-gradient(
+    circle,
+    hsl(-230, 100%, 40%) 0%,
+    hsl(263, 64%, 19%) 70%
+  );
 }
 
 #root {
@@ -28,11 +32,23 @@
   width: 28rem;
   display: flex;
 
+  background: var(--bg-color);
   border-radius: 10%;
-  background: radial-gradient(circle, #943b9b 0%, #2a1251 70%);
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.header {
+  display: flex;
+  padding: 0 4rem;
+  text-align: center;
+}
+.change-unit-btn {
+  margin: 0;
+  width: 6rem;
+  font-size: 2rem;
+  padding-left: 0.9rem;
 }
 
 .counter-number {
@@ -55,6 +71,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+
+  pointer-events: none;
 }
 
 .degree-symbol {
@@ -66,7 +84,7 @@
 }
 
 .room-name,
-.btn-operation {
+button {
   position: relative;
   display: flex;
 
@@ -79,7 +97,7 @@
   margin-bottom: 0;
 }
 .room-name::before,
-.btn-operation::before {
+button::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -95,7 +113,7 @@
   padding: 1rem 20%;
 }
 
-.btn-operation {
+button {
   width: 8rem;
   justify-content: center;
   background: transparent;
@@ -105,9 +123,9 @@
   padding-bottom: calc(1rem + 1px);
 
   cursor: pointer;
-  transition: 150ms;
+  transition: 100ms;
 }
 
-.btn-operation:active {
+button:active {
   filter: brightness(1.3);
 }
