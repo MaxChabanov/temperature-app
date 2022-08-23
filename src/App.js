@@ -58,7 +58,7 @@ function App() {
     <div className="counter-container">
       <div className="header">
         <h1>Temperature Control</h1>
-        <button className="change-unit-btn">{currentUnits}</button>
+        {/* <button className="change-unit-btn">{currentUnits}</button> */}
       </div>
       <div className="temp-counter">
         <p className="counter-number" id="counter-number">
