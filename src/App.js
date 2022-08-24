@@ -4,6 +4,16 @@ function App() {
   const [tempValue, setTempValue] = useState(23);
   const [currentUnits, setUnits] = useState("C");
 
+  const MIN_COLOR_C = 12;
+  const MIN_TEMP_C = 0;
+  const MAX_COLOR_C = 36;
+  const MAX_TEMP_C = 40;
+
+  const MIN_COLOR_F = 12;
+  const MIN_TEMP_F = 0;
+  const MAX_COLOR_F = 97;
+  const MAX_TEMP_F = 104;
+
   function setTempColor(color) {
     document.documentElement.style.setProperty(
       "--bg-color",
@@ -13,15 +23,32 @@ function App() {
 
   function increaseTemp() {
     let newTemp = tempValue + 1;
+
+    let minTemp = MIN_TEMP_C;
+    let minTempColor = MIN_COLOR_C;
+    let maxTemp = MAX_TEMP_C;
+    let maxTempColor = MAX_COLOR_C;
+
     let newColor = newTemp * -10;
+
+    console.log(currentUnits);
+    if (currentUnits === "F") {
+      minTemp = MIN_TEMP_F;
+      minTempColor = MIN_COLOR_F;
+      maxTemp = MAX_TEMP_F;
+      maxTempColor = MAX_COLOR_F;
+
+      newColor = Math.round(((tempValue - 32) * 5) / 9) * -10;
+    }
+
     setTempColor(newColor);
 
-    if (tempValue >= 36) {
+    if (tempValue >= maxTempColor) {
       newColor = 36 * -10;
 
       setTempColor(newColor);
 
-      if (tempValue >= 40) {
+      if (tempValue >= maxTemp) {
         newTemp = tempValue;
         setTempColor(newColor);
       }
@@ -54,11 +81,24 @@ function App() {
 
     setTempValue(newTemp);
   }
+
+  function changeUnits() {
+    if (currentUnits === "C") {
+      setUnits("F");
+      setTempValue(Math.round((tempValue * 9) / 5 + 32));
+    }
+    if (currentUnits === "F") {
+      setUnits("C");
+      setTempValue(Math.round(((tempValue - 32) * 5) / 9));
+    }
+  }
   return (
     <div className="counter-container">
       <div className="header">
         <h1>Temperature Control</h1>
-        {/* <button className="change-unit-btn">{currentUnits}</button> */}
+        <button className="change-unit-btn" onClick={() => changeUnits()}>
+          {currentUnits}
+        </button>
       </div>
       <div className="temp-counter">
         <p className="counter-number" id="counter-number">
