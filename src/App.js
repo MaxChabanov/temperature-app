@@ -9,8 +9,8 @@ function App() {
   const MAX_COLOR_C = 36;
   const MAX_TEMP_C = 40;
 
-  const MIN_COLOR_F = 12;
-  const MIN_TEMP_F = 0;
+  const MIN_COLOR_F = 54;
+  const MIN_TEMP_F = 32;
   const MAX_COLOR_F = 97;
   const MAX_TEMP_F = 104;
 
@@ -31,7 +31,6 @@ function App() {
 
     let newColor = newTemp * -10;
 
-    console.log(currentUnits);
     if (currentUnits === "F") {
       minTemp = MIN_TEMP_F;
       minTempColor = MIN_COLOR_F;
@@ -40,7 +39,6 @@ function App() {
 
       newColor = Math.round(((tempValue - 32) * 5) / 9) * -10;
     }
-
     setTempColor(newColor);
 
     if (tempValue >= maxTempColor) {
@@ -54,28 +52,45 @@ function App() {
       }
     }
 
-    if (newTemp <= 12) {
+    if (newTemp <= minTempColor) {
       setTempColor(-120);
     }
 
     setTempValue(newTemp);
   }
+
   function decreaseTemp() {
     let newTemp = tempValue - 1;
+
+    let minTemp = MIN_TEMP_C;
+    let minTempColor = MIN_COLOR_C;
+    let maxTemp = MAX_TEMP_C;
+    let maxTempColor = MAX_COLOR_C;
+
     let newColor = newTemp * -10;
+
+    if (currentUnits === "F") {
+      minTemp = MIN_TEMP_F;
+      minTempColor = MIN_COLOR_F;
+      maxTemp = MAX_TEMP_F;
+      maxTempColor = MAX_COLOR_F;
+
+      newColor = Math.round(((tempValue - 32) * 5) / 9) * -10;
+    }
     setTempColor(newColor);
 
-    if (tempValue <= 12) {
+    if (tempValue <= minTempColor) {
       newColor = 12 * -10;
 
       setTempColor(newColor);
+      console.log(minTempColor);
 
-      if (tempValue <= 0) {
+      if (tempValue <= minTemp) {
         newTemp = tempValue;
       }
     }
 
-    if (tempValue >= 36) {
+    if (tempValue >= maxTempColor) {
       setTempColor(-360);
     }
 
@@ -96,9 +111,6 @@ function App() {
     <div className="counter-container">
       <div className="header">
         <h1>Temperature Control</h1>
-        <button className="change-unit-btn" onClick={() => changeUnits()}>
-          {currentUnits}
-        </button>
       </div>
       <div className="temp-counter">
         <p className="counter-number" id="counter-number">
@@ -116,6 +128,14 @@ function App() {
         </p>
         <button className="btn-operation" onClick={() => decreaseTemp()}>
           -
+        </button>
+      </div>
+      <div className="controls-container">
+        <button className="mode-btn" onClick={() => changeUnits()}>
+          M
+        </button>
+        <button className="change-units-btn" onClick={() => changeUnits()}>
+          {currentUnits}
         </button>
       </div>
     </div>
