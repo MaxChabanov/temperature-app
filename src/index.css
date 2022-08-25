@@ -41,12 +41,16 @@
 
 .header {
   display: flex;
-  padding: 0 4rem;
-  text-align: center;
+  margin-top: 1.5rem;
 }
 
 .counter-number {
   display: flex;
+}
+
+.space-filler {
+  width: 100%;
+  height: 32rem;
 }
 
 .temp-counter {
@@ -75,8 +79,6 @@
 
 .room-container {
   display: flex;
-
-  margin-top: 110%;
 }
 .controls-container {
   display: flex;

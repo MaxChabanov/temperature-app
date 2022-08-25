@@ -112,6 +112,8 @@ function App() {
       <div className="header">
         <h1>Temperature Control</h1>
       </div>
+
+      <div className="space-filler"></div>
       <div className="temp-counter">
         <p className="counter-number" id="counter-number">
           {tempValue}
