@@ -12,7 +12,15 @@ function App() {
     }
   });
 
-  const [currentUnits, setUnits] = useState("C");
+  const [currentUnits, setUnits] = useState(() => {
+    const savedUnits = JSON.parse(localStorage.getItem("units"));
+
+    if (savedUnits === "F") {
+      return savedUnits;
+    } else {
+      return "C";
+    }
+  });
   const [currentTitle, setTitle] = useState("Temperature Control");
 
   const MIN_COLOR_C = 12;
@@ -129,12 +137,22 @@ function App() {
 
   function changeUnits() {
     if (currentUnits === "C") {
-      setUnits("F");
-      setTempValue(Math.round((tempValue * 9) / 5 + 32));
+      const newUnits = "F";
+      const newTemp = Math.round((tempValue * 9) / 5 + 32);
+
+      setUnits(newUnits);
+      setTempValue(newTemp);
+      localStorage.setItem("tempValue", JSON.stringify(newTemp));
+      localStorage.setItem("units", JSON.stringify(newUnits));
     }
     if (currentUnits === "F") {
-      setUnits("C");
-      setTempValue(Math.round(((tempValue - 32) * 5) / 9));
+      const newUnits = "C";
+      const newTemp = Math.round(((tempValue - 32) * 5) / 9);
+
+      setUnits(newUnits);
+      setTempValue(newTemp);
+      localStorage.setItem("tempValue", JSON.stringify(newTemp));
+      localStorage.setItem("units", JSON.stringify(newUnits));
     }
   }
   return (
