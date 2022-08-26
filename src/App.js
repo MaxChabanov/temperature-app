@@ -21,6 +21,8 @@ function App() {
       return "C";
     }
   });
+
+  const [currentMode, setMode] = useState("color");
   const [currentTitle, setTitle] = useState("Temperature Control");
 
   const MIN_COLOR_C = 12;
@@ -41,11 +43,11 @@ function App() {
   function setTempColor(color) {
     document.documentElement.style.setProperty(
       "--bg-color",
-      `radial-gradient(circle, hsl(${color}, 100%, 40%) 0%, hsl(263, 64%, 19%) 70%)`
+      `radial-gradient(circle, hsl(${color}) 0%, hsl(263, 64%, 19%) 70%)`
     );
     localStorage.setItem(
       "colorValue",
-      `radial-gradient(circle, hsl(${color}, 100%, 40%) 0%, hsl(263, 64%, 19%) 70%)`
+      `radial-gradient(circle, hsl(${color}) 0%, hsl(263, 64%, 19%) 70%)`
     );
   }
 
@@ -67,28 +69,32 @@ function App() {
 
       newColor = Math.round(((tempValue - 32) * 5) / 9) * -10;
     }
-    setTempColor(newColor);
+    setTempColor(`${newColor}, 100%, 40%`);
 
     if (tempValue >= maxTempColor) {
       newColor = 36 * -10;
 
-      setTempColor(newColor);
+      setTempColor(`${newColor}, 100%, 40%`);
 
       if (tempValue >= maxTemp) {
         newTemp = tempValue;
-        setTempColor(newColor);
+        setTempColor(`${newColor}, 100%, 40%`);
         setTitle("Good luck burning to death");
       }
     }
 
     if (newTemp <= minTempColor) {
-      setTempColor(-120);
+      setTempColor(`-120, 100%, 40%`);
     }
     if (tempValue === minTemp + 1) {
       setTitle("Temperature Control");
     }
 
     setTempValue(newTemp);
+    if (currentMode === "scale") {
+      setTempColor(`308, 45%, 44%`);
+      localStorage.setItem("tempValue", JSON.stringify(`308, 45%, 44%`));
+    }
     localStorage.setItem("tempValue", JSON.stringify(newTemp));
   }
 
@@ -110,12 +116,12 @@ function App() {
 
       newColor = Math.round(((tempValue - 32) * 5) / 9) * -10;
     }
-    setTempColor(newColor);
+    setTempColor(`${newColor}, 100%, 40%`);
 
     if (tempValue <= minTempColor) {
       newColor = 12 * -10;
 
-      setTempColor(newColor);
+      setTempColor(`${newColor}, 100%, 40%`);
 
       if (tempValue <= minTemp) {
         newTemp = tempValue;
@@ -124,13 +130,17 @@ function App() {
     }
 
     if (tempValue >= maxTempColor) {
-      setTempColor(-360);
+      setTempColor(`-360, 100%, 40%`);
     }
 
     if (tempValue === maxTemp - 1) {
       setTitle("Temperature Control");
     }
 
+    if (currentMode === "scale") {
+      setTempColor(`308, 45%, 44%`);
+      localStorage.setItem("tempValue", JSON.stringify(`308, 45%, 44%`));
+    }
     setTempValue(newTemp);
     localStorage.setItem("tempValue", JSON.stringify(newTemp));
   }
@@ -153,6 +163,22 @@ function App() {
       setTempValue(newTemp);
       localStorage.setItem("tempValue", JSON.stringify(newTemp));
       localStorage.setItem("units", JSON.stringify(newUnits));
+    }
+  }
+
+  function changeMode() {
+    if (currentMode === "color") {
+      setTempColor(`308, 45%, 44%`);
+      setMode("scale");
+    } else {
+      if (currentUnits === "F") {
+        setTempColor(
+          `${Math.round(((tempValue - 32) * 5) / 9) * -10}, 100%, 40%`
+        );
+      } else {
+        setTempColor(`${tempValue * -10}, 100%, 40%`);
+      }
+      setMode("color");
     }
   }
   return (
@@ -185,7 +211,7 @@ function App() {
         </button>
       </div>
       <div className="controls-container">
-        <button className="mode-btn" onClick={() => changeUnits()}>
+        <button className="mode-btn" onClick={() => changeMode()}>
           M
         </button>
 
