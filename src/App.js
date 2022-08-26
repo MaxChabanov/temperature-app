@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 
 function App() {
-  const [tempValue, setTempValue] = useState(23);
+  const [tempValue, setTempValue] = useState(() => {
+    const savedTemp = localStorage.getItem("tempValue");
+    const initialValue = JSON.parse(savedTemp);
+    return initialValue || 23;
+  });
+
   const [currentUnits, setUnits] = useState("C");
+  const [currentTitle, setTitle] = useState("Temperature Control");
 
   const MIN_COLOR_C = 12;
   const MIN_TEMP_C = 0;
@@ -14,9 +20,18 @@ function App() {
   const MAX_COLOR_F = 97;
   const MAX_TEMP_F = 104;
 
+  document.documentElement.style.setProperty(
+    "--bg-color",
+    localStorage.getItem("colorValue")
+  );
+
   function setTempColor(color) {
     document.documentElement.style.setProperty(
       "--bg-color",
+      `radial-gradient(circle, hsl(${color}, 100%, 40%) 0%, hsl(263, 64%, 19%) 70%)`
+    );
+    localStorage.setItem(
+      "colorValue",
       `radial-gradient(circle, hsl(${color}, 100%, 40%) 0%, hsl(263, 64%, 19%) 70%)`
     );
   }
@@ -49,14 +64,19 @@ function App() {
       if (tempValue >= maxTemp) {
         newTemp = tempValue;
         setTempColor(newColor);
+        setTitle("Good luck burning to death");
       }
     }
 
     if (newTemp <= minTempColor) {
       setTempColor(-120);
     }
+    if (tempValue === minTemp + 1) {
+      setTitle("Temperature Control");
+    }
 
     setTempValue(newTemp);
+    localStorage.setItem("tempValue", JSON.stringify(newTemp));
   }
 
   function decreaseTemp() {
@@ -83,10 +103,10 @@ function App() {
       newColor = 12 * -10;
 
       setTempColor(newColor);
-      console.log(minTempColor);
 
       if (tempValue <= minTemp) {
         newTemp = tempValue;
+        setTitle("Good luck freezing to death");
       }
     }
 
@@ -94,7 +114,12 @@ function App() {
       setTempColor(-360);
     }
 
+    if (tempValue === maxTemp - 1) {
+      setTitle("Temperature Control");
+    }
+
     setTempValue(newTemp);
+    localStorage.setItem("tempValue", JSON.stringify(newTemp));
   }
 
   function changeUnits() {
@@ -110,7 +135,7 @@ function App() {
   return (
     <div className="counter-container">
       <div className="header">
-        <h1>Temperature Control</h1>
+        <h1>{currentTitle}</h1>
       </div>
 
       <div className="space-filler"></div>
@@ -128,6 +153,10 @@ function App() {
         <p id="room-name" className="room-name">
           Kitchen
         </p>
+        <div className="room-controls-container">
+          <button className="room-control-btn">←</button>
+          <button className="room-control-btn">→</button>
+        </div>
         <button className="btn-operation" onClick={() => decreaseTemp()}>
           -
         </button>
@@ -136,6 +165,7 @@ function App() {
         <button className="mode-btn" onClick={() => changeUnits()}>
           M
         </button>
+
         <button className="change-units-btn" onClick={() => changeUnits()}>
           {currentUnits}
         </button>
