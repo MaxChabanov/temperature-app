@@ -4,7 +4,12 @@ function App() {
   const [tempValue, setTempValue] = useState(() => {
     const savedTemp = localStorage.getItem("tempValue");
     const initialValue = JSON.parse(savedTemp);
-    return initialValue || 23;
+
+    if (initialValue >= 0 && initialValue) {
+      return initialValue;
+    } else {
+      return 23;
+    }
   });
 
   const [currentUnits, setUnits] = useState("C");
