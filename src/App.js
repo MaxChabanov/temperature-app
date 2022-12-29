@@ -79,7 +79,6 @@ function App() {
       if (tempValue >= maxTemp) {
         newTemp = tempValue;
         setTempColor(`${newColor}, 100%, 40%`);
-        setTitle("Good luck burning to death");
       }
     }
 
@@ -125,7 +124,6 @@ function App() {
 
       if (tempValue <= minTemp) {
         newTemp = tempValue;
-        setTitle("Good luck freezing to death");
       }
     }
 
